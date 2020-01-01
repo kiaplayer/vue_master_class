@@ -1,4 +1,4 @@
-## Build and start container
+# Build and start container
 
 ``` bash
 docker-compose run --rm --service-ports vue
