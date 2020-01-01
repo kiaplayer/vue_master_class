@@ -1,6 +1,9 @@
-# app
+# Build and start container
 
-> A Vue.js project
+``` bash
+docker-compose run --rm --service-ports vue
+
+# app
 
 ## Build Setup
 
