@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import PageHome from '@/pages/PageHome'
-import PageThreadShow from '@/pages/PageThreadShow'
-import PageNotFound from '@/pages/PageNotFound'
-import PageForum from '@/pages/PageForum'
-import PageCategory from '@/pages/PageCategory'
+import PageHome from '../pages/PageHome'
+import PageThreadShow from '../pages/PageThreadShow'
+import PageNotFound from '../pages/PageNotFound'
+import PageForum from '../pages/PageForum'
+import PageCategory from '../pages/PageCategory'
 
 Vue.use(Router)
 
