@@ -6,7 +6,6 @@
 </template>
 
 <script>
-  import sourceData from '../data.json'
   import CategoryListItem from '../components/CategoryListItem'
   export default {
     components: {
@@ -20,18 +19,12 @@
     },
     computed: {
       category () {
-        return sourceData.categories[this.id]
+        return this.$store.state.categories[this.id]
       },
       forums () {
-        return Object.values(sourceData.forums)
+        return Object.values(this.$store.state.forums)
           .filter(forum => forum.categoryId === this.id)
       }
     }
   }
 </script>
-
-<style scoped>
-  .category-wrapper {
-    width: 100%;
-  }
-</style>

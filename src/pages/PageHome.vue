@@ -6,17 +6,15 @@
 </template>
 
 <script>
-import sourceData from '../data.json'
-import CategoryList from '@/components/CategoryList'
-
-export default {
-  components: {
-    CategoryList
-  },
-  data () {
-    return {
-      categories: Object.values(sourceData.categories)
+  import CategoryList from '@/components/CategoryList'
+  export default {
+    components: {
+      CategoryList
+    },
+    computed: {
+      categories () {
+        return Object.values(this.$store.state.categories)
+      }
     }
   }
-}
 </script>

@@ -10,12 +10,6 @@
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'PageNotFound'
-  }
-</script>
-
 <style module>
   .headingLarge {
     font-size: 100px;
