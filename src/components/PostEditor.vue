@@ -33,9 +33,7 @@
       save () {
         const post = {
           text: this.text,
-          userId: 'jUjmgCurRRdzayqbRMO7aTG9X1G2',
-          threadId: this.threadId,
-          publishedAt: Math.floor(Date.now() / 1000)
+          threadId: this.threadId
         }
         this.$emit('save', {post})
         this.$store.dispatch('createPost', post)
