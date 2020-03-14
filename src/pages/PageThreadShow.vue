@@ -1,5 +1,5 @@
 <template>
-  <div class="col-large push-top">
+  <div v-if="thread && user" class="col-large push-top">
     <h1>
       {{ thread.title }}
       <router-link
@@ -26,6 +26,7 @@
 <script>
   import PostList from '../components/PostList'
   import PostEditor from '../components/PostEditor'
+  import {countObjectProperties} from '../utils'
   export default {
     components: {
       PostList,
@@ -45,13 +46,7 @@
         return this.$store.getters.threadRepliesCount(this.thread['.key'])
       },
       contributorsCount () {
-        const replies = Object.values(this.thread.posts)
-          .filter(postId => postId !== this.thread.firstPostId)
-          .map(postId => this.$store.state.posts[postId])
-
-        const userIds = replies.map(post => post.userId)
-
-        return userIds.filter((item, index) => index === userIds.indexOf(item)).length
+        return countObjectProperties(this.thread.contributors)
       },
       posts () {
         const postIds = Object.values(this.thread.posts)
@@ -60,6 +55,19 @@
       user () {
         return this.$store.state.users[this.thread.userId]
       }
+    },
+    created () {
+      // fetch thread
+      this.$store.dispatch('fetchThread', {id: this.id}).then(thread => {
+        this.$store.dispatch('fetchUser', {id: thread.userId})
+        // fetch posts
+        Object.keys(thread.posts).forEach(postId => {
+          // fetch post
+          this.$store.dispatch('fetchPost', {id: postId}).then(post => {
+            this.$store.dispatch('fetchUser', {id: post.userId})
+          })
+        })
+      })
     }
   }
 </script>

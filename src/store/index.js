@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import sourceData from '../data'
 import {countObjectProperties} from '../utils'
+import * as firebase from 'firebase'
 
 Vue.use(Vuex)
 
@@ -16,10 +16,25 @@ const makeAppendChildToParentMutation = ({parent, child}) =>
 
 export default new Vuex.Store({
   state: {
-    ...sourceData,
+    categories: {},
+    forums: {},
+    threads: {},
+    posts: {},
+    users: {},
     authId: 'VXjpr2WHa8Ux4Bnggym8QFLdv5C3'
   },
   actions: {
+    fetchPost ({commit, state}, {id}) {
+      console.log('Fetching post: ' + id)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('posts').child(id).once('value', snapshot => {
+          const post = snapshot.val()
+          post['.key'] = snapshot.key
+          commit('setPost', {postId: post['.key'], post})
+          resolve(state.posts[id])
+        })
+      })
+    },
     createPost ({commit, state}, post) {
       const postId = 'greatPost' + Math.random()
       post['.key'] = postId
@@ -47,8 +62,30 @@ export default new Vuex.Store({
         resolve(post)
       })
     },
+    fetchUser ({commit, state}, {id}) {
+      console.log('Fetching user: ' + id)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('users').child(id).once('value', snapshot => {
+          const user = snapshot.val()
+          user['.key'] = snapshot.key
+          commit('setUser', {userId: user['.key'], user})
+          resolve(state.users[id])
+        })
+      })
+    },
     updateUser ({commit}, user) {
       commit('setUser', {userId: user['.key'], user})
+    },
+    fetchThread ({commit, state}, {id}) {
+      console.log('Fetching thread: ' + id)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('threads').child(id).once('value', snapshot => {
+          const thread = snapshot.val()
+          thread['.key'] = snapshot.key
+          commit('setThread', {threadId: thread['.key'], thread})
+          resolve(state.threads[id])
+        })
+      })
     },
     createThread ({commit, state, dispatch}, {title, text, forumId}) {
       return new Promise((resolve, reject) => {
@@ -85,7 +122,7 @@ export default new Vuex.Store({
   },
   getters: {
     authUser (state) {
-      return state.users[state.authId]
+      return {}
     },
     userPostsCount: state => id => countObjectProperties(state.users[id].posts),
     userThreadsCount: state => id => countObjectProperties(state.users[id].threads),
